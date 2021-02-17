@@ -301,4 +301,5 @@ components:
             'Oh cool , gibt es bald ein #Queensberry #Comeback ?? Würde mich total freuen , @seashells_and_stardust war ja gestern auch da , aber wenn Comeback , dann nur in Original-Besetzung @mrs.tpprt und #Antonella'
         timestamp:
           type: integer
+          readOnly: true
           example: 1559079334
