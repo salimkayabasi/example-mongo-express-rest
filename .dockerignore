@@ -1,6 +1,7 @@
 .github/
 coverage/
 docs/
+!docs/openapi.yml
 node_modules/
 .ecrc
 .editorconfig

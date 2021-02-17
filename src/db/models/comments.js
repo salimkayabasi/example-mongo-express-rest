@@ -17,10 +17,20 @@ const schema = new mongoose.Schema({
     index: true,
   },
   hashTags: {
-    type: [String],
+    type: [
+      {
+        type: String,
+        index: true,
+      },
+    ],
   },
   mentions: {
-    type: [String],
+    type: [
+      {
+        type: String,
+        index: true,
+      },
+    ],
   },
   text: {
     type: String,
