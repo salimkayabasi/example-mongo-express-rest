@@ -1,4 +1,4 @@
-const { configure } = require('log4js')
+const { configure } = require('log4js');
 const config = require('config');
 
 const configuration = {

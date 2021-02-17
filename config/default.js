@@ -9,4 +9,7 @@ module.exports = {
   log: {
     level: env.LOG_LEVEL || 'INFO',
   },
+  db: {
+    url: env.DB_URL,
+  },
 };
