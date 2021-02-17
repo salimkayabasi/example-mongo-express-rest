@@ -1,0 +1,51 @@
+name: Draw.io Compiler
+
+on:
+  push:
+    paths:
+      - '**/*.drawio'
+
+env:
+  DISPLAY: :99.0
+  DRAWIO_VERSION: 13.9.9
+  DRAWIO_DISABLE_UPDATE: true
+
+jobs:
+  drawio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instaling drawio
+        timeout-minutes: 3
+        run: |
+          sudo apt-get install libappindicator3-1
+          wget https://github.com/jgraph/drawio-desktop/releases/download/v${{ env.DRAWIO_VERSION }}/draw.io-amd64-${{ env.DRAWIO_VERSION }}.deb
+          sudo dpkg -i draw.io-amd64-${{ env.DRAWIO_VERSION }}.deb
+          sudo rm draw.io-amd64-${{ env.DRAWIO_VERSION }}.deb
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          drawio --help
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 2
+      - name: Check files
+        id: getfile
+        run: |
+          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -e '.*\.drawio' | xargs)"
+      - name: Updated drawio files
+        run: |
+          echo ${{ steps.getfile.outputs.files }}
+      - name: Compiling files
+        timeout-minutes: 15
+        run: |
+          for f in ${{ steps.getfile.outputs.files }}; do drawio -r -x -f png $f; done
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git status
+          git commit -am "Adding drawio images" || echo "No updates"
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

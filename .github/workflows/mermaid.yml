@@ -1,0 +1,41 @@
+name: Mermaid
+
+on:
+  push:
+    paths:
+      - '**/*.md'
+
+jobs:
+  mermaid:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 2
+      - name: Check files
+        id: getfile
+        run: |
+          echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -e '.*\.md$' | xargs)"
+      - name: Updated MD files
+        run: |
+          echo ${{ steps.getfile.outputs.files }}
+      - name: Compile mermaid
+        uses: neenjaw/compile-mermaid-markdown-action@0.2.4
+        with:
+          files: ${{ steps.getfile.outputs.files }}
+          output: 'docs/assets'
+        env:
+          HIDE_CODEBLOCKS: 1
+          ABSOLUTE_IMAGE_LINKS: 0
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git status
+          git commit -am "Mermaid: Adding new compiled images" || echo "No updates"
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

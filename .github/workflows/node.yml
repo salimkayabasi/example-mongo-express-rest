@@ -1,0 +1,38 @@
+name: Build & Test & Deploy
+
+on: push
+
+jobs:
+  check_deploy:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      # Prepare
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node version
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14
+      # Set ENV if it is PROD
+      - name: Set env to PROD
+        if: endsWith(github.ref, '/main')
+        run: |
+          echo "PROD_ONLY_ENV=should_be_here" >> $GITHUB_ENV
+      # Fetch dependencies
+      - name: Fetch dependencies
+        run: npm ci
+      # Linters
+      - name: Linting
+        run: npm run lint
+      # - name: Typescript Check
+      #   run: npm run types
+      # Testing
+      - name: Testing
+        run: npm run test
+      # Build JS files
+      # - name: Build TS files
+      #   run: npm run build
+      # Deploy
+      # - name: Deploy
+      # if: endsWith(github.ref, '/main') || endsWith(github.ref, '/develop')
