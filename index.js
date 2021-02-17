@@ -1,1 +1,2 @@
-console.log('hello world');
+require('./src/utils/logging');
+module.exports = require('./src');
