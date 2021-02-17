@@ -1,3 +1,3 @@
-const logger = require('log4js').getLogger('main');
+const {listen} = require('./server/');
 
-logger.info('Hello world');
+listen();
