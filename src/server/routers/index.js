@@ -19,6 +19,9 @@ module.exports = {
       }),
     );
     app.use('/v1', v1());
+    app.use('/', (req, res) => {
+      res.redirect('/v1/users');
+    });
     app.use(notFound);
     app.use(onResponse);
   },
