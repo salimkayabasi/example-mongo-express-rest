@@ -1,24 +1,12 @@
 const { Router } = require('express');
-const mongoose = require('mongoose');
-const crud = require('../crud');
+const users = require('./users');
+const comments = require('./comments');
+const stats = require('./stats');
 
 module.exports = () => {
   const router = Router();
-
-  const Users = mongoose.model('Users');
-  const Comments = mongoose.model('Comments');
-
-  const userRouter = crud(Users);
-
-  userRouter.get('/:id/comments', async (req, res, next) => {
-    const userId = req.params.id;
-    const comments = await Comments.find({
-      userId,
-    });
-    next(comments || []);
-  });
-
-  router.use('/users', userRouter);
-  router.use('/comments', crud(Comments));
+  router.use('/users', users());
+  router.use('/comments', comments());
+  router.use('/stats', stats());
   return router;
 };

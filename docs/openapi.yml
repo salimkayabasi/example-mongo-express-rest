@@ -184,8 +184,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+  /stats/mentions:
+    get:
+      tags:
+        - Statistic
+      description: Show stats
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results between 1 and 10
+          schema:
+            type: number
+            maximum: 10
+            minimum: 1
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statistic'
+  /stats/hashtags:
+    get:
+      tags:
+        - Statistic
+      description: Show stats
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results between 1 and 10
+          schema:
+            type: number
+            maximum: 10
+            minimum: 1
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statistic'
 components:
   schemas:
+    Statistic:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: hashTag
+        count:
+          type: number
+          format: int32
     User:
       type: object
       additionalProperties: false
