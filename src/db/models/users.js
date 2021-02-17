@@ -3,6 +3,18 @@ const { nanoid } = require('nanoid');
 
 const modelName = 'Users';
 const schema = new mongoose.Schema({
+  id: {
+    type: String,
+    unique: true,
+    index: true,
+    required: true,
+    default: nanoid,
+  },
+  username: {
+    type: String,
+    required: true,
+    index: true,
+  },
   contact: {
     firstName: {
       type: String,
@@ -14,25 +26,14 @@ const schema = new mongoose.Schema({
       type: String,
     },
   },
-  id: {
-    type: String,
-    unique: true,
-    index: true,
-    required: true,
-    default: nanoid,
-  },
   profilePictureUrl: {
     type: String,
+    required: true,
   },
   updatedAt: {
     type: Number,
     required: true,
     default: Date.now(),
-  },
-  username: {
-    type: String,
-    required: true,
-    index: true,
   },
 }, {
   timestamps: {

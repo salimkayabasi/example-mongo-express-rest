@@ -10,6 +10,11 @@ const schema = new mongoose.Schema({
     required: true,
     default: nanoid,
   },
+  userId: {
+    type: String,
+    ref: 'Users',
+    required: true,
+  },
   hashTags: {
     type: [String],
   },
@@ -23,11 +28,6 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
     default: Date.now(),
-  },
-  userId: {
-    type: String,
-    ref: 'Users',
-    required: true,
   },
 }, {
   timestamps: {

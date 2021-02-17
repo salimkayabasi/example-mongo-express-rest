@@ -1,25 +1,33 @@
 const { Router } = require('express');
-const bodyParser = require('body-parser');
 
 module.exports = (model, router = Router()) => {
-  router.post('/', bodyParser.json(), async (req, res, next) => {
+  router.post('/', async (req, res, next) => {
     const result = await model.create(req.body);
+    res.status(201);
     next(result);
   });
   router.get('/', async (req, res, next) => {
     const result = await model.find();
-    next(result);
+    next(result || []);
   });
   router.get('/:id', async (req, res, next) => {
     const result = await model.findOne({ id: req.params.id });
+    if (!result) {
+      res.status(404);
+    }
     next(result);
   });
   router.delete('/:id', async (req, res, next) => {
-    const result = await model.findOneAndRemove({ id: req.params.id });
-    next(result);
+    await model.findOneAndRemove({ id: req.params.id });
+    res.status(204);
+    next('');
   });
-  router.delete('/:id', bodyParser.json(), async (req, res, next) => {
-    const result = await model.findOneAndUpdate({ id: req.params.id }, req.body);
+  router.patch('/:id', async (req, res, next) => {
+    const {
+      id,
+      ...update
+    } = req.body;
+    const result = await model.findOneAndUpdate({ id: req.params.id }, update);
     next(result);
   });
   return router;

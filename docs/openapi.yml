@@ -1,0 +1,230 @@
+openapi: 3.0.0
+info:
+  description: This is an example for using mongodb with nodejs
+  version: 1.0.0
+  title: Example Mongo Express REST
+servers:
+  - url: http://localhost:3000/v1
+    description: Local development
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      description: Fetch all users
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - Users
+      description: Add new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to delete
+          schema:
+            type: string
+      responses:
+        204:
+          description: Successful deleted
+    patch:
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to update
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /comments:
+    get:
+      tags:
+        - Comments
+      description: Fetch all comments
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+    post:
+      tags:
+        - Comments
+      description: Add new comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        200:
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+  /comments/{commentId}:
+    get:
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The id of the comment to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+    delete:
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The id of the comment to delete
+          schema:
+            type: string
+      responses:
+        204:
+          description: Successful deleted
+    patch:
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: The id of the comment to update
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+components:
+  schemas:
+    User:
+      type: object
+      additionalProperties: false
+      required:
+        - username
+        - profilePictureUrl
+      properties:
+        id:
+          type: string
+          example: '10099703348'
+          readOnly: true
+        username:
+          type: string
+          example: zwillinge2019
+        profilePictureUrl:
+          type: string
+          format: uri
+        updatedAt:
+          type: integer
+          readOnly: true
+        contact:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+              format: email
+    Comment:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: '17975662396250187'
+          readOnly: true
+        userId:
+          type: string
+          example: 1111608826
+        hashTags:
+          type: array
+          items:
+            type: string
+            example:
+              - Antonella
+              - Queensberry
+              - Comeback
+        mentions:
+          type: array
+          items:
+            type: string
+            example:
+              - seashells_and_stardust
+              - mrs.tpprt
+        text:
+          type: string
+          example:
+            'Oh cool , gibt es bald ein #Queensberry #Comeback ?? Würde mich total freuen , @seashells_and_stardust war ja gestern auch da , aber wenn Comeback , dann nur in Original-Besetzung @mrs.tpprt und #Antonella'
+        timestamp:
+          type: integer
+          example: 1559079334
