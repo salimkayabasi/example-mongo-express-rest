@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
     type: String,
     ref: 'Users',
     required: true,
+    index: true,
   },
   hashTags: {
     type: [String],

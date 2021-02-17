@@ -1,8 +1,8 @@
 const createError = require('http-errors');
 
 const notFound = (req, res, next) => {
-  const err = new createError.NotFound();
-  next(err);
+  res.status(404);
+  next(new createError.NotFound());
 };
 
 // eslint-disable-next-line no-unused-vars

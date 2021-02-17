@@ -85,6 +85,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /users/{userId}/comments:
+    get:
+      tags:
+        - Users
+      description: Get all comments of given userId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful received
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
   /comments:
     get:
       tags:
